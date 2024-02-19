@@ -6,12 +6,16 @@
 #include <string>
 #include <type_traits>
 #include <vector>
+#include <unordered_map>
 
 template <typename T> struct is_vector : std::false_type {};
 template <typename T, typename A> struct is_vector<std::vector<T, A>> : std::true_type {};
 
 template <typename T> struct is_map : std::false_type {};
 template <typename K, typename V, typename C, typename A> struct is_map<std::map<K, V, C, A>> : std::true_type {};
+
+template <typename T> struct is_umap : std::false_type {};
+template <typename K, typename V, typename C, typename A> struct is_umap<std::unordered_map<K, V, C, A>> : std::true_type {};
 
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, int>, int> ParseJson(std::string input) { return stoi(input); }
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, double>, double> ParseJson(std::string input) { return stod(input); }
@@ -80,7 +84,7 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
   }
   return result;
 }
-template <typename T> std::enable_if_t<is_map<T>::value, T> ParseJson(std::string input) {
+template <typename T> std::enable_if_t<is_map<T>::value || is_umap<T>::value, T> ParseJson(std::string input) {
   T result;
   int left = 0, right = 0;
   int inString = 0;

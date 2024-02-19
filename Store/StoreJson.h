@@ -1,6 +1,6 @@
 #pragma once
-#include "Json/ParseJson.h"
-#include "Json/WriteJson.h"
+#include "../Json/ParseJson.h"
+#include "../Json/WriteJson.h"
 #include <fstream>
 #include <string>
 #include <vector>
