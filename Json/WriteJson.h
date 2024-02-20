@@ -33,8 +33,8 @@ template <typename T> std::string WriteJson(std::vector<T> input) {
   return json;
 }
 
-template <typename V>
-std::string WriteJson(std::unordered_map<std::string, V> input) {
+template <typename K, typename V>
+std::string WriteJson(std::unordered_map<K, V> input) {
   std::string json = "{";
 
   char first = 0;
@@ -47,7 +47,7 @@ std::string WriteJson(std::unordered_map<std::string, V> input) {
   return json;
 }
 
-template <typename V> std::string WriteJson(std::map<std::string, V> input) {
+template <typename K, typename V> std::string WriteJson(std::map<K, V> input) {
   std::string json = "{";
 
   int first = 1;

@@ -18,67 +18,80 @@ std::string WriteJson(unsigned long input) { return std::to_string(input); }
 
 std::string WriteJson(unsigned long long input) { return std::to_string(input); }
 
+#include <string>
+
 std::string WriteJson(char input) {
-  std::string result = "";
-  std::string sChars = "\"\\/bfnrt";
-  std::string dsChars = "\"\\/\b\f\n\r\t";
+    std::string result = "";
+    std::string sChars = "\"\\/\b\f\n\r\t";
+    std::string dsChars = "\"\\\\/bfnrt";
 
-  if (sChars.find(input) != std::string::npos) {
-    result += '\\';
-  }
-  result += input;
+    size_t found = sChars.find(input);
+    if (found != std::string::npos) {
+        result += '\\';
+        result += dsChars[found];
+    }
+    else {
+        result += input;
+    }
 
-  return "\"" + result + "\"";
+    return "\"" + result + "\"";
 }
 
 std::string WriteJson(std::string input) {
-  std::string result = "";
-  std::string sChars = "\"\\/bfnrt";
-  std::string dsChars = "\"\\/\b\f\n\r\t";
+    std::string result = "";
+    std::string sChars = "\"\\/\b\f\n\r\t";
+    std::string dsChars = "\"\\\\/bfnrt";
 
-  for (char c : input) {
-
-    if (sChars.find(c) != std::string::npos) {
-      result += '\\';
+    for (char c : input) {
+        size_t found = sChars.find(c);
+        if (found != std::string::npos) {
+            result += '\\';
+            result += dsChars[found];
+        }
+        else {
+            result += c;
+        }
     }
-    result += c;
-  }
 
-  return "\"" + result + "\"";
+    return "\"" + result + "\"";
 }
 
-std::string WriteJson(const char *input) {
-  std::string result = "";
-  std::string sChars = "\"\\/bfnrt";
-  std::string dsChars = "\"\\/\b\f\n\r\t";
+std::string WriteJson(const char* input) {
+    std::string result = "";
+    std::string sChars = "\"\\/\b\f\n\r\t";
+    std::string dsChars = "\"\\\\/bfnrt";
 
-  int it = 0;
-  for (char c = input[it]; it < sizeof(input) - 1; it++) {
-
-    if (sChars.find(c) != std::string::npos) {
-      result += '\\';
+    for (const char* ptr = input; *ptr != '\0'; ptr++) {
+        size_t found = sChars.find(*ptr);
+        if (found != std::string::npos) {
+            result += '\\';
+            result += dsChars[found];
+        }
+        else {
+            result += *ptr;
+        }
     }
-    result += c;
-  }
 
-  return "\"" + result + "\"";
+    return "\"" + result + "\"";
 }
 
-std::string WriteJson(char *input) {
-  std::string result = "";
-  std::string sChars = "\"\\/bfnrt";
-  std::string dsChars = "\"\\/\b\f\n\r\t";
+std::string WriteJson(char* input) {
+    std::string result = "";
+    std::string sChars = "\"\\/\b\f\n\r\t";
+    std::string dsChars = "\"\\\\/bfnrt";
 
-  int it = 0;
-  for (char c = input[it]; it < sizeof(input) - 1; it++) {
-
-    if (sChars.find(c) != std::string::npos) {
-      result += '\\';
+    for (char* ptr = input; *ptr != '\0'; ptr++) {
+        size_t found = sChars.find(*ptr);
+        if (found != std::string::npos) {
+            result += '\\';
+            result += dsChars[found];
+        }
+        else {
+            result += *ptr;
+        }
     }
-    result += c;
-  }
 
-  return "\"" + result + "\"";
+    return "\"" + result + "\"";
 }
 
 std::string WriteJson(bool input) { return input ? "true" : "false"; }
