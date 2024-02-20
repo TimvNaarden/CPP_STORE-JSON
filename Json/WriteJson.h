@@ -14,9 +14,10 @@ std::string WriteJson(long input);
 std::string WriteJson(unsigned int input);
 std::string WriteJson(unsigned short input);
 std::string WriteJson(unsigned long input);
+std::string WriteJson(unsigned long long input);
 std::string WriteJson(char input);
-std::string WriteJson(char *input);
-std::string WriteJson(const char *input);
+std::string WriteJson(char* input);
+std::string WriteJson(const char* input);
 std::string WriteJson(std::string input);
 std::string WriteJson(bool input);
 

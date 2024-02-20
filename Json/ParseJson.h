@@ -18,6 +18,10 @@ template <typename T> struct is_umap : std::false_type {};
 template <typename K, typename V, typename C, typename A> struct is_umap<std::unordered_map<K, V, C, A>> : std::true_type {};
 
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, int>, int> ParseJson(std::string input) { return stoi(input); }
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, short>, short> ParseJson(std::string input) { return static_cast<short>(stoi(input)); }
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, unsigned int>, unsigned int> ParseJson(std::string input) { return static_cast<unsigned int>(stoul(input)); }
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, unsigned short>, unsigned short> ParseJson(std::string input) { return static_cast<unsigned short>(stoul(input)); }
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, bool>, bool> ParseJson(std::string input) { return input == "true"; }
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, double>, double> ParseJson(std::string input) { return stod(input); }
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, long double>, long double> ParseJson(std::string input) { return stold(input); }
 template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value && std::is_same_v<T, float>, float> ParseJson(std::string input) { return stof(input); }
@@ -51,6 +55,14 @@ template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value
     }
   }
   return result.str();
+}
+
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value&& std::is_same_v<T, char*>, char*> ParseJson(std::string input) {
+    return ParseJson<std::string>(input).data();
+}
+
+template <typename T> std::enable_if_t<!is_map<T>::value && !is_vector<T>::value&& std::is_same_v<T, const char*>, const char*> ParseJson(std::string input) {
+    return ParseJson<std::string>(input).c_str();
 }
 
 template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::string input) {

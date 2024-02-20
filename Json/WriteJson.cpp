@@ -16,6 +16,8 @@ std::string WriteJson(unsigned short input) { return std::to_string(input); }
 
 std::string WriteJson(unsigned long input) { return std::to_string(input); }
 
+std::string WriteJson(unsigned long long input) { return std::to_string(input); }
+
 std::string WriteJson(char input) {
   std::string result = "";
   std::string sChars = "\"\\/bfnrt";
