@@ -70,7 +70,7 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
   int inString = 0;
   int start = 1;
   int left = 0, right = 0;
-  for (int i = 0; i < input.length(); i++) {
+  for (int i = 1; i < input.length(); i++) {
     if (!inString) {
       if (input[i] == '{' || input[i] == '[')
         left++;
@@ -79,7 +79,6 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
     }
     if (input[i] == '\"') {
         inString = !inString;
-        std::cout << " in string" << std::endl;
     }
 
     if (input[i] == '\\') {
@@ -91,7 +90,7 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
       continue;
     }
 
-    if ((input[i] == ',' && !inString) || left == right) {
+    if ((input[i] == ',' && !inString && left == right) || i == (input.length() -1)) {
       result.push_back(ParseJson<typename T::value_type>(input.substr(start, i - start)));
       start = i + 1;
     }
@@ -104,7 +103,7 @@ template <typename T> std::enable_if_t<is_map<T>::value || is_umap<T>::value, T>
   int inString = 0;
   int start = 1;
   T::key_type key{};
-  for (int i = 0; i < input.length(); i++) {
+  for (int i = 1; i < input.length(); i++) {
     if (!inString) {
       if (input[i] == '{' || input[i] == '[')
         left++;
@@ -127,7 +126,7 @@ template <typename T> std::enable_if_t<is_map<T>::value || is_umap<T>::value, T>
     if (input[i] == ':' && !inString) {
       key = ParseJson<typename T::key_type>(input.substr(start, i - start));
       start = i + 1;
-    } else if ((input[i] == ',' && !inString) || left == right) {
+    } else if ((input[i] == ',' && !inString && left == right) || i == (input.length() - 1)) {
       result.emplace(key, ParseJson<typename T::mapped_type>(input.substr(start, i - start)));
       start = i + 1;
     }
