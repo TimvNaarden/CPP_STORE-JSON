@@ -77,8 +77,10 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
       if (input[i] == '}' || input[i] == ']')
         right++;
     }
-    if (input[i] == '\"')
-      inString = !inString;
+    if (input[i] == '\"') {
+        inString = !inString;
+        std::cout << " in string" << std::endl;
+    }
 
     if (input[i] == '\\') {
       if (input[i + 1] == 'u') {
@@ -90,7 +92,7 @@ template <typename T> std::enable_if_t<is_vector<T>::value, T> ParseJson(std::st
     }
 
     if ((input[i] == ',' && !inString) || left == right) {
-      result.push_back(ParseJson<typename T::value_type>(input.substr(start, i - start - 1)));
+      result.push_back(ParseJson<typename T::value_type>(input.substr(start, i - start)));
       start = i + 1;
     }
   }
