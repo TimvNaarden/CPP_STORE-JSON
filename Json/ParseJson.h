@@ -103,7 +103,7 @@ template <typename T> std::enable_if_t<is_map<T>::value || is_umap<T>::value, T>
   int left = 0, right = 0;
   int inString = 0;
   int start = 1;
-  std::stringstream key;
+  T::key_type key{};
   for (int i = 0; i < input.length(); i++) {
     if (!inString) {
       if (input[i] == '{' || input[i] == '[')
@@ -125,11 +125,10 @@ template <typename T> std::enable_if_t<is_map<T>::value || is_umap<T>::value, T>
       continue;
     }
     if (input[i] == ':' && !inString) {
-      key.str("");
-      key << ParseJson<typename T::key_type>(input.substr(start, (i - start - 1)));
+      key = ParseJson<typename T::key_type>(input.substr(start, i - start));
       start = i + 1;
     } else if ((input[i] == ',' && !inString) || left == right) {
-      result.emplace(key.str(), ParseJson<typename T::mapped_type>(input.substr(start, i - start - 1)));
+      result.emplace(key, ParseJson<typename T::mapped_type>(input.substr(start, i - start)));
       start = i + 1;
     }
   }
